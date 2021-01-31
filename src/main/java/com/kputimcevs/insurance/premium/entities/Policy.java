@@ -15,7 +15,7 @@ public class Policy {
 
     public static class SubObject {
         public String subObjectName;
-        public double sumInsured;
+        public float sumInsured;
         public RiskType riskType;
     }
 }
