@@ -1,6 +1,6 @@
 package com.kputimcevs.insurance.premium;
 
-import com.kputimcevs.insurance.premium.dataobjects.Policy;
+import com.kputimcevs.insurance.premium.entities.Policy;
 import org.springframework.stereotype.Component;
 
 @Component

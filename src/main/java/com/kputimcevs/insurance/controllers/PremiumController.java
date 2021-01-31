@@ -1,6 +1,6 @@
 package com.kputimcevs.insurance.controllers;
 
-import com.kputimcevs.insurance.premium.dataobjects.Policy;
+import com.kputimcevs.insurance.premium.entities.Policy;
 import com.kputimcevs.insurance.premium.domain.PremiumResponse;
 import com.kputimcevs.insurance.premium.services.PremiumService;
 import org.springframework.beans.factory.annotation.Autowired;
