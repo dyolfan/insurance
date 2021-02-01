@@ -4,7 +4,7 @@ import static com.kputimcevs.insurance.premium.entities.ThresholdOperator.ABOVE;
 import static com.kputimcevs.insurance.premium.entities.ThresholdOperator.ABOVE_OR_EQUAL;
 
 public enum RiskType {
-    FIRE(100, ABOVE, (float) 0.014, (float) 0.028),
+    FIRE(100, ABOVE, (float) 0.014, (float) 0.024),
     THEFT(15, ABOVE_OR_EQUAL, (float) 0.11, (float) 0.05);
 
     public final float threshold;

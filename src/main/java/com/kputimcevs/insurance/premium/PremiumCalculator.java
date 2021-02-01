@@ -12,20 +12,11 @@ import static com.kputimcevs.insurance.common.utils.MathUtil.roundTo2DecimalPosi
 
 @Component
 public class PremiumCalculator {
-
-    private double sumRiskMap(Map.Entry<RiskType, Float> entry) {
-        RiskType riskType = entry.getKey();
-        float sum = entry.getValue();
-
-        // TODO: add threshold coefficients logic
-        return sum;
-    }
-
-    public String calculate(Policy policy) {
+    public float calculate(Policy policy) {
         Map<RiskType, Float> subObjectsRiskMap = getSubObjectsRiskTypesMap(policy);
-        float result = (float) subObjectsRiskMap.entrySet().stream().mapToDouble(this::sumRiskMap).sum();
+        float result = (float) subObjectsRiskMap.entrySet().stream().mapToDouble(this::calculatePremiumForRiskMap).sum();
 
-        return roundTo2DecimalPositions(result) + " EUR";
+        return roundTo2DecimalPositions(result);
     }
 
     private Map<RiskType, Float> getSubObjectsRiskTypesMap(Policy policy) {
@@ -35,5 +26,16 @@ public class PremiumCalculator {
                 .collect(
                         Collectors.toMap(subObj -> subObj.riskType, subObj -> subObj.sumInsured, Float::sum)
                 );
+    }
+
+    private double calculatePremiumForRiskMap(Map.Entry<RiskType, Float> entry) {
+        RiskType riskType = entry.getKey();
+        float sum = entry.getValue();
+
+        if (riskType.thresholdOperator.isAboveThreshold(sum, riskType.threshold)) {
+            return sum * riskType.aboveThresholdCoefficient;
+        } else {
+            return sum * riskType.averageCoefficient;
+        }
     }
 }
