@@ -23,7 +23,7 @@ class PremiumServiceTest {
 
     @Test
     public void getPremiumForPolicyReturnsPremiumResponse() {
-        float premium = (float) 10.56;
+        float premium = 10.56f;
         Policy policy = mock(Policy.class);
         when(premiumCalculator.calculate(policy)).thenReturn(premium);
 

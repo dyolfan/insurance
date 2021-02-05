@@ -13,32 +13,32 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ThresholdOperatorTest {
     @Test
     public void falseForAboveWhenDoesNotExceedThreshold() {
-        float sum = (float) 2.5;
-        float threshold = (float) 2.5;
+        float sum = 2.5f;
+        float threshold = 2.5f;
 
         assertFalse(ABOVE.isAboveThreshold(sum, threshold));
     }
 
     @Test
     public void trueForAboveWhenExceedsThreshold() {
-        float sum = (float) 2.51;
-        float threshold = (float) 2.5;
+        float sum = 2.51f;
+        float threshold = 2.5f;
 
         assertTrue(ABOVE.isAboveThreshold(sum, threshold));
     }
 
     @Test
     public void falseForAboveOrEqualWhenDoesNotExceedThreshold() {
-        float sum = (float) 2.49;
-        float threshold = (float) 2.5;
+        float sum = 2.49f;
+        float threshold = 2.5f;
 
         assertFalse(ABOVE_OR_EQUAL.isAboveThreshold(sum, threshold));
     }
 
     @Test
     public void falseForAboveOrEqualWhenExceedsThreshold() {
-        float sum = (float) 2.5;
-        float threshold = (float) 2.5;
+        float sum = 2.5f;
+        float threshold = 2.5f;
 
         assertTrue(ABOVE_OR_EQUAL.isAboveThreshold(sum, threshold));
     }

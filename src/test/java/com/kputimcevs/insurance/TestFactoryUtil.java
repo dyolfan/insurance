@@ -12,14 +12,14 @@ public class TestFactoryUtil {
     public static Policy createPolicy() {
         return createPolicy(List.of(
                 createPolicyObject("House", List.of(
-                        createPolicySubObject("TV", RiskType.FIRE, (float) 20.49),
-                        createPolicySubObject("Clock", RiskType.THEFT, (float) 2.48),
-                        createPolicySubObject("Stereo System", RiskType.FIRE, (float) 25.51)
+                        createPolicySubObject("TV", RiskType.FIRE, 20.49f),
+                        createPolicySubObject("Clock", RiskType.THEFT, 2.48f),
+                        createPolicySubObject("Stereo System", RiskType.FIRE, 25.51f)
                 )),
                 createPolicyObject("Garden", List.of(
-                        createPolicySubObject("Trimmer", RiskType.THEFT, (float) 2),
-                        createPolicySubObject("Treehouse", RiskType.FIRE, (float) 54),
-                        createPolicySubObject("Snow machine", RiskType.THEFT, (float) 3.52)
+                        createPolicySubObject("Trimmer", RiskType.THEFT, 2f),
+                        createPolicySubObject("Treehouse", RiskType.FIRE, 54f),
+                        createPolicySubObject("Snow machine", RiskType.THEFT, 3.52f)
                 ))
         ));
     }
