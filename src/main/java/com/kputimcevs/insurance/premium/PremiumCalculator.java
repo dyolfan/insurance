@@ -1,7 +1,7 @@
 package com.kputimcevs.insurance.premium;
 
-import com.kputimcevs.insurance.premium.entities.policy.Policy;
 import com.kputimcevs.insurance.premium.entities.RiskType;
+import com.kputimcevs.insurance.premium.entities.policy.Policy;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -12,25 +12,25 @@ import static com.kputimcevs.insurance.common.utils.MathUtil.roundTo2DecimalPosi
 
 @Component
 public class PremiumCalculator {
-    public float calculate(Policy policy) {
-        Map<RiskType, Float> subObjectsRiskMap = getSubObjectsRiskTypesMap(policy);
-        float result = (float) subObjectsRiskMap.entrySet().stream().mapToDouble(this::calculatePremiumForRiskMap).sum();
+    public double calculate(Policy policy) {
+        Map<RiskType, Double> subObjectsRiskMap = getSubObjectsRiskTypesMap(policy);
+        double result = subObjectsRiskMap.entrySet().stream().mapToDouble(this::calculatePremiumForRiskMap).sum();
 
         return roundTo2DecimalPositions(result);
     }
 
-    private Map<RiskType, Float> getSubObjectsRiskTypesMap(Policy policy) {
+    private Map<RiskType, Double> getSubObjectsRiskTypesMap(Policy policy) {
         return policy.policyObjects.stream()
                 .map(po -> po.subObjects)
                 .flatMap(Collection::stream)
                 .collect(
-                        Collectors.toMap(subObj -> subObj.riskType, subObj -> subObj.sumInsured, Float::sum)
+                        Collectors.toMap(subObj -> subObj.riskType, subObj -> subObj.sumInsured, Double::sum)
                 );
     }
 
-    private double calculatePremiumForRiskMap(Map.Entry<RiskType, Float> entry) {
+    private double calculatePremiumForRiskMap(Map.Entry<RiskType, Double> entry) {
         RiskType riskType = entry.getKey();
-        float sum = entry.getValue();
+        double sum = entry.getValue();
 
         if (riskType.thresholdOperator.isAboveThreshold(sum, riskType.threshold)) {
             return sum * riskType.aboveThresholdCoefficient;
