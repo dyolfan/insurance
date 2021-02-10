@@ -2,40 +2,32 @@ package com.kputimcevs.insurance.premium;
 
 import com.kputimcevs.insurance.premium.entities.RiskType;
 import com.kputimcevs.insurance.premium.entities.policy.Policy;
+import com.kputimcevs.insurance.premium.risktype.processors.IRiskTypeProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.kputimcevs.insurance.common.utils.MathUtil.roundTo2DecimalPositions;
 
 @Component
 public class PremiumCalculator {
+    @Autowired
+    private ApplicationContext context;
+
     public double calculate(Policy policy) {
-        Map<RiskType, Double> subObjectsRiskMap = getSubObjectsRiskTypesMap(policy);
-        double result = subObjectsRiskMap.entrySet().stream().mapToDouble(this::calculatePremiumForRiskMap).sum();
+        Set<RiskType> riskTypes = policy.policyObjects.stream().map(po -> po.subObjects).flatMap(Collection::stream).map(so -> so.riskType).collect(Collectors.toSet());
 
-        return roundTo2DecimalPositions(result);
-    }
+        double policyPremium = 0;
 
-    private Map<RiskType, Double> getSubObjectsRiskTypesMap(Policy policy) {
-        return policy.policyObjects.stream()
-                .map(po -> po.subObjects)
-                .flatMap(Collection::stream)
-                .collect(
-                        Collectors.toMap(subObj -> subObj.riskType, subObj -> subObj.sumInsured, Double::sum)
-                );
-    }
-
-    private double calculatePremiumForRiskMap(Map.Entry<RiskType, Double> entry) {
-        RiskType riskType = entry.getKey();
-        double sum = entry.getValue();
-
-        if (riskType.thresholdOperator.isAboveThreshold(sum, riskType.threshold)) {
-            return sum * riskType.aboveThresholdCoefficient;
-        } else {
-            return sum * riskType.averageCoefficient;
+        for (var riskType : riskTypes) {
+            IRiskTypeProcessor riskTypeProcessor = context.getBean(riskType.riskTypeProcessor);
+            policyPremium += riskTypeProcessor.process(policy, riskType);
         }
+
+        return roundTo2DecimalPositions(policyPremium);
     }
 }

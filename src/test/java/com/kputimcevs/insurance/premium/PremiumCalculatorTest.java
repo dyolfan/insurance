@@ -1,17 +1,25 @@
 package com.kputimcevs.insurance.premium;
 
 import com.kputimcevs.insurance.premium.entities.policy.Policy;
+import com.kputimcevs.insurance.premium.risktype.processors.ThresholdRiskTypeProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationContext;
 
 import static com.kputimcevs.insurance.TestFactoryUtil.createPolicy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PremiumCalculatorTest {
+    @Mock
+    private ApplicationContext context;
+
     @InjectMocks
     private PremiumCalculator premiumCalculator;
 
@@ -19,6 +27,7 @@ class PremiumCalculatorTest {
 
     @BeforeEach
     public void setUp() {
+        when(context.getBean(any(Class.class))).thenReturn(new ThresholdRiskTypeProcessor());
         policy = createPolicy();
     }
 
