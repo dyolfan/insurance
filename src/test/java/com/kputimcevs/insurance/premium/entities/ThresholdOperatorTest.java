@@ -37,8 +37,8 @@ class ThresholdOperatorTest {
 
     @Test
     public void falseForAboveOrEqualWhenExceedsThreshold() {
-        double sum = 2.5;
-        double threshold = 2.5;
+        float sum = 2.5f;
+        float threshold = 2.5f;
 
         assertTrue(ABOVE_OR_EQUAL.isAboveThreshold(sum, threshold));
     }
