@@ -1,21 +1,18 @@
 package com.kputimcevs.insurance.premium.entities;
 
-import static com.kputimcevs.insurance.premium.entities.ThresholdOperator.ABOVE;
-import static com.kputimcevs.insurance.premium.entities.ThresholdOperator.ABOVE_OR_EQUAL;
+import com.kputimcevs.insurance.premium.risktype.processors.CataclysmRiskTypeProcessor;
+import com.kputimcevs.insurance.premium.risktype.processors.IRiskTypeProcessor;
+import com.kputimcevs.insurance.premium.risktype.processors.ThresholdRiskTypeProcessor;
 
 public enum RiskType {
-    FIRE(100, ABOVE, 0.014f, 0.024f),
-    THEFT(15, ABOVE_OR_EQUAL, 0.11f, 0.05f);
+    FIRE(ThresholdRiskTypeProcessor.class),
+    THEFT(ThresholdRiskTypeProcessor.class),
+    VOLCANO(CataclysmRiskTypeProcessor.class),
+    SINKING(ThresholdRiskTypeProcessor.class);
 
-    public final float threshold;
-    public final float averageCoefficient;
-    public final float aboveThresholdCoefficient;
-    public final ThresholdOperator thresholdOperator;
+    public Class<? extends IRiskTypeProcessor> riskTypeProcessor;
 
-    RiskType(int threshold, ThresholdOperator thresholdOperator, float averageCoefficient, float aboveThresholdCoefficient) {
-        this.threshold = threshold;
-        this.averageCoefficient = averageCoefficient;
-        this.aboveThresholdCoefficient = aboveThresholdCoefficient;
-        this.thresholdOperator = thresholdOperator;
+    RiskType(Class<? extends IRiskTypeProcessor> riskTypeProcessor) {
+        this.riskTypeProcessor = riskTypeProcessor;
     }
 }

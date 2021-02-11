@@ -10,27 +10,27 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-class ThresholdOperatorTest {
+class BasicThresholdOperatorTest {
     @Test
     public void falseForAboveWhenDoesNotExceedThreshold() {
-        float sum = 2.5f;
-        float threshold = 2.5f;
+        double sum = 2.5;
+        double threshold = 2.5;
 
         assertFalse(ABOVE.isAboveThreshold(sum, threshold));
     }
 
     @Test
     public void trueForAboveWhenExceedsThreshold() {
-        float sum = 2.51f;
-        float threshold = 2.5f;
+        double sum = 2.51;
+        double threshold = 2.5;
 
         assertTrue(ABOVE.isAboveThreshold(sum, threshold));
     }
 
     @Test
     public void falseForAboveOrEqualWhenDoesNotExceedThreshold() {
-        float sum = 2.49f;
-        float threshold = 2.5f;
+        double sum = 2.49;
+        double threshold = 2.5;
 
         assertFalse(ABOVE_OR_EQUAL.isAboveThreshold(sum, threshold));
     }

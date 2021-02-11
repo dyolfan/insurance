@@ -10,7 +10,7 @@ public class SubObject {
     @NotBlank
     public String subObjectName;
     @PositiveOrZero
-    public float sumInsured;
+    public double sumInsured;
     @NotNull
     public RiskType riskType;
 
@@ -22,11 +22,11 @@ public class SubObject {
         this.subObjectName = subObjectName;
     }
 
-    public float getSumInsured() {
+    public double getSumInsured() {
         return sumInsured;
     }
 
-    public void setSumInsured(float sumInsured) {
+    public void setSumInsured(double sumInsured) {
         this.sumInsured = sumInsured;
     }
 

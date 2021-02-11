@@ -4,7 +4,7 @@ public enum ThresholdOperator {
     ABOVE,
     ABOVE_OR_EQUAL;
 
-    public boolean isAboveThreshold(float sum, float threshold) {
+    public boolean isAboveThreshold(double sum, double threshold) {
         switch (this) {
             case ABOVE:
                 return sum > threshold;
