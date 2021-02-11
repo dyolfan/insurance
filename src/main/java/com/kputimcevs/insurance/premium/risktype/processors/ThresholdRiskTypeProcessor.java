@@ -1,21 +1,12 @@
 package com.kputimcevs.insurance.premium.risktype.processors;
 
 import com.kputimcevs.insurance.premium.entities.RiskType;
-import com.kputimcevs.insurance.premium.entities.ThresholdOperator;
 import com.kputimcevs.insurance.premium.entities.policy.Policy;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.kputimcevs.insurance.premium.entities.RiskType.FIRE;
-import static com.kputimcevs.insurance.premium.entities.RiskType.SINKING;
-import static com.kputimcevs.insurance.premium.entities.RiskType.THEFT;
-import static com.kputimcevs.insurance.premium.entities.ThresholdOperator.ABOVE;
-import static com.kputimcevs.insurance.premium.entities.ThresholdOperator.ABOVE_OR_EQUAL;
 
 @Component
 public class ThresholdRiskTypeProcessor implements IRiskTypeProcessor {
@@ -28,12 +19,12 @@ public class ThresholdRiskTypeProcessor implements IRiskTypeProcessor {
     private double calculatePremiumForRiskMap(Map.Entry<RiskType, Double> entry) {
         RiskType riskType = entry.getKey();
         double sum = entry.getValue();
-        Threshold threshold = Threshold.resolveThresholdFromRiskType(riskType);
+        BasicThreshold basicThreshold = BasicThreshold.resolveThresholdFromRiskType(riskType);
 
-        if (threshold.thresholdOperator.isAboveThreshold(sum, threshold.thresholdValue)) {
-            return sum * threshold.aboveThresholdCoefficient;
+        if (basicThreshold.thresholdOperator.isAboveThreshold(sum, basicThreshold.thresholdValue)) {
+            return sum * basicThreshold.aboveThresholdCoefficient;
         } else {
-            return sum * threshold.averageCoefficient;
+            return sum * basicThreshold.averageCoefficient;
         }
     }
 
@@ -47,26 +38,4 @@ public class ThresholdRiskTypeProcessor implements IRiskTypeProcessor {
                 );
     }
 
-    private enum Threshold {
-        DEFAULT_ABOVE_THRESHOLD(100, ABOVE, 0.014, 0.024, List.of(FIRE, SINKING)),
-        DEFAULT_ABOVE_OR_EQUAL_THRESHOLD(15, ABOVE_OR_EQUAL, 0.11, 0.05, List.of(THEFT));
-
-        public final double thresholdValue;
-        public final double averageCoefficient;
-        public final double aboveThresholdCoefficient;
-        public final ThresholdOperator thresholdOperator;
-        public final List<RiskType> riskTypes;
-
-        Threshold(int thresholdValue, ThresholdOperator thresholdOperator, double averageCoefficient, double aboveThresholdCoefficient, List<RiskType> riskTypes) {
-            this.thresholdValue = thresholdValue;
-            this.averageCoefficient = averageCoefficient;
-            this.aboveThresholdCoefficient = aboveThresholdCoefficient;
-            this.thresholdOperator = thresholdOperator;
-            this.riskTypes = riskTypes;
-        }
-
-        public static Threshold resolveThresholdFromRiskType(RiskType riskType) {
-            return Arrays.stream(Threshold.values()).filter(t -> t.riskTypes.contains(riskType)).findFirst().orElseThrow();
-        }
-    }
 }
